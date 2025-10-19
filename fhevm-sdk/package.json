@@ -1,0 +1,63 @@
+{
+  "name": "@privacy-bidding/fhevm-sdk",
+  "version": "1.0.0",
+  "description": "Universal SDK for fhEVM - Privacy-preserving construction bidding",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./react": {
+      "import": "./dist/react.mjs",
+      "require": "./dist/react.js",
+      "types": "./dist/react.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/react.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts src/react.ts --format cjs,esm --dts --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx",
+    "test": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "fhevm",
+    "fhe",
+    "encryption",
+    "privacy",
+    "zama",
+    "blockchain",
+    "ethereum",
+    "sdk"
+  ],
+  "author": "Privacy Bidding Team",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "ethers": "^6.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "fhevmjs": "^0.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.2.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ]
+}
