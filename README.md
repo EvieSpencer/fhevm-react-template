@@ -249,7 +249,7 @@ MIT
 
 ## 🔗 Links
 
-- [Live Demo](https://your-demo-url.com)
+- [Live Demo](https://eviespencer.github.io/ConstructionBidding/)
 - [Smart Contract on Sepolia](https://sepolia.etherscan.io/address/0xAD4f8099219E6aa0fB556eB6CC51A670682d30DE)
 - [Zama fhEVM Documentation](https://docs.zama.ai/fhevm)
 - [GitHub Repository](https://github.com/your-repo)
