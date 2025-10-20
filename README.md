@@ -207,19 +207,36 @@ function BidForm({ projectId, contract }) {
 
 ## 🎬 Demo Applications
 
-### Full Production Example
+This project includes 4 levels of examples demonstrating different aspects and integration approaches:
 
-A complete, production-ready single-page application demonstrating privacy-preserving construction bidding:
+### SDK-Integrated Examples (Levels 1-3)
 
-**Location**: `examples/full-application/`
+These examples demonstrate **actual client-side encryption** using the SDK:
+
+#### Level 1: Basic Encryption (`examples/basic-encryption/`)
+Framework-agnostic core SDK usage without any UI framework.
+
+#### Level 2: React Integration (`examples/react-integration/`)
+React hooks integration with FhevmProvider and component-based encryption.
+
+#### Level 3: Advanced Bidding (`examples/advanced-usage/`)
+Complete bidding workflow with SDK integration and smart contract interaction.
+
+### UI/UX Demo (Level 4)
+
+#### Full Production Example (`examples/full-application/`)
+
+A complete single-page application demonstrating **production UI/UX**:
+
+**Important**: This is a UI/UX demonstration. The smart contract supports FHE, but the frontend currently uses plain values for demonstration. **For actual SDK-integrated encryption, see Levels 1-3 above.**
 
 **Features**:
-- Complete single-page application with glassmorphism UI
-- Deployed smart contract on Sepolia (0xAD4f8099219E6aa0fB556eB6CC51A670682d30DE)
+- Complete SPA with glassmorphism UI (2,500 lines)
+- Deployed FHE-enabled contract on Sepolia
 - Wallet connection and network detection
-- Encrypted bid submission with FHE
-- Project management and winner selection
-- Real-world production example
+- Project management and bidding workflow
+- Winner selection and contractor authorization
+- Production-ready UI design
 
 **Quick Start**:
 ```bash
@@ -231,6 +248,12 @@ open examples/full-application/index.html
 ```
 
 **Live Demo**: [https://eviespencer.github.io/ConstructionBidding/](https://eviespencer.github.io/ConstructionBidding/)
+
+**Why separate from SDK?**
+- Standalone HTML file (no build tools)
+- Demonstrates complete UI/UX flow
+- SDK requires module bundlers
+- See Levels 1-3 for SDK usage
 
 See [examples/full-application/README.md](./examples/full-application/README.md) for complete documentation.
 
