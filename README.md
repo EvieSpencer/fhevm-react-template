@@ -35,7 +35,8 @@ fhevm-react-template/
 ├── examples/               # Usage examples
 │   ├── basic-encryption/
 │   ├── react-integration/
-│   └── advanced-usage/
+│   ├── advanced-usage/
+│   └── full-application/   # Complete production example
 │
 └── docs/                   # Documentation
     ├── getting-started.md
@@ -204,18 +205,40 @@ function BidForm({ projectId, contract }) {
 - [SDK Architecture](./fhevm-sdk/README.md)
 - [Deployment Guide](./docs/deployment-guide.md)
 
-## 🎬 Demo Application
+## 🎬 Demo Applications
 
-A complete working demo is included showing:
-- Project creation with encrypted requirements
-- Bid submission with FHE
-- Encrypted bid viewing
-- Winner selection on encrypted data
-- Decryption with proper authorization
+### Full Production Example
 
-Run the demo:
+A complete, production-ready single-page application demonstrating privacy-preserving construction bidding:
+
+**Location**: `examples/full-application/`
+
+**Features**:
+- Complete single-page application with glassmorphism UI
+- Deployed smart contract on Sepolia (0xAD4f8099219E6aa0fB556eB6CC51A670682d30DE)
+- Wallet connection and network detection
+- Encrypted bid submission with FHE
+- Project management and winner selection
+- Real-world production example
+
+**Quick Start**:
 ```bash
-cd demo
+# Serve the application
+npx http-server examples/full-application -p 8080
+
+# Or open index.html directly in your browser
+open examples/full-application/index.html
+```
+
+**Live Demo**: [https://eviespencer.github.io/ConstructionBidding/](https://eviespencer.github.io/ConstructionBidding/)
+
+See [examples/full-application/README.md](./examples/full-application/README.md) for complete documentation.
+
+### Next.js Demo (Coming Soon)
+
+A React/Next.js version using the SDK's React hooks:
+```bash
+cd demo-nextjs
 npm install
 npm run dev
 ```

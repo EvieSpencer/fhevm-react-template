@@ -88,17 +88,43 @@ fhevm-react-template/
 │   │                                  # - Loading states
 │   │                                  # - Error handling
 │   │
-│   └── advanced-usage/                # Level 3: Production Example
-│       └── BiddingExample.tsx         # Complete bidding application
-│                                      # - Full bid submission form
-│                                      # - Smart contract integration
-│                                      # - Transaction handling
-│                                      # - Encrypted data viewing
-│                                      # - Decryption workflow
-│                                      # - Error handling & UX
+│   ├── advanced-usage/                # Level 3: Production Example
+│   │   └── BiddingExample.tsx         # Complete bidding application
+│   │                                  # - Full bid submission form
+│   │                                  # - Smart contract integration
+│   │                                  # - Transaction handling
+│   │                                  # - Encrypted data viewing
+│   │                                  # - Decryption workflow
+│   │                                  # - Error handling & UX
+│   │
+│   └── full-application/              # Level 4: Complete Production App
+│       ├── index.html                 # Single-page application (73KB)
+│       │                              # - Glassmorphism UI design
+│       │                              # - Complete wallet integration
+│       │                              # - Project management
+│       │                              # - Encrypted bid submission
+│       │                              # - Real-time blockchain interaction
+│       │
+│       ├── PrivacyConstructionBidding.sol  # FHE-enabled smart contract
+│       │                              # - euint32 encrypted bids
+│       │                              # - Private bid comparison
+│       │                              # - Winner selection without decryption
+│       │                              # - Deployed on Sepolia
+│       │
+│       ├── hardhat.config.cjs         # Optimized deployment config
+│       │                              # - Gas optimization (runs: 1)
+│       │                              # - 1 Gwei gas price
+│       │                              # - Sepolia network setup
+│       │
+│       └── README.md                  # Complete documentation
+│                                      # - Use case explanation
+│                                      # - Feature walkthrough
+│                                      # - FHE integration guide
+│                                      # - Deployment instructions
+│                                      # - Production checklist
 │
-└── [Future: demo/]                    # 🎬 Full Demo Application
-    └── (To be added if needed)        # Complete standalone demo app
+└── demo-nextjs/                       # 🎬 Next.js Demo (Coming Soon)
+    └── (React/Next.js version using SDK hooks)
 
 ```
 
@@ -122,10 +148,15 @@ fhevm-react-template/
   - PROJECT_SUMMARY.md: ~550 lines
 
 ### Examples
-- **Example Code**: 3 files (~645+ lines)
+- **Example Code**: 4 directories (~3,700+ lines)
   - basic-encryption/index.ts: ~65 lines
   - react-integration/App.tsx: ~180 lines
   - advanced-usage/BiddingExample.tsx: ~400 lines
+  - full-application/: 4 files
+    - index.html: ~2,500 lines (73KB complete SPA)
+    - PrivacyConstructionBidding.sol: ~250 lines (FHE contract)
+    - hardhat.config.cjs: ~30 lines (deployment config)
+    - README.md: ~275 lines (comprehensive docs)
 
 ### Configuration
 - **Config Files**: 2 files
@@ -170,10 +201,11 @@ Production-grade documentation:
 - Best practices
 
 ### 6. Examples (`examples/`)
-Three levels of complexity:
+Four levels of complexity:
 - **Basic**: Vanilla JavaScript encryption
 - **Intermediate**: React integration
-- **Advanced**: Full production application
+- **Advanced**: Complete bidding component
+- **Full Application**: Production-ready SPA with deployed contract on Sepolia
 
 ## 📦 Package Exports
 
