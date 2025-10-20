@@ -249,6 +249,8 @@ open examples/full-application/index.html
 
 **Live Demo**: [https://eviespencer.github.io/ConstructionBidding/](https://eviespencer.github.io/ConstructionBidding/)
 
+**Video Demo**: demo1.mp4  demo2.mp4 demo3.mp4
+
 **Why separate from SDK?**
 - Standalone HTML file (no build tools)
 - Demonstrates complete UI/UX flow
