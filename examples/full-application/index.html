@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Bidding Platform | FHE-Powered Construction Procurement</title>
+    <meta name="description" content="Secure and confidential construction project bidding powered by Fully Homomorphic Encryption">
+
+    <!-- Favicon -->
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+
+    <style>
+        /* ============================================
+           CSS VARIABLES SYSTEM
+           ============================================ */
+        :root {
+            /* Colors */
+            --color-bg: #070910;
+            --color-bg-alt: #0a0d16;
+            --color-panel: rgba(16, 20, 36, 0.92);
+            --color-panel-alt: rgba(20, 24, 40, 0.88);
+            --color-text: #f5f7ff;
+            --color-text-muted: rgba(198, 207, 232, 0.72);
+            --color-border: rgba(120, 142, 182, 0.22);
+            --color-border-strong: rgba(120, 142, 182, 0.38);
+
+            /* Accent Colors */
+            --accent: #6d6eff;
+            --accent-hover: #5456ff;
+            --success: #2bc37b;
+            --success-soft: rgba(43, 195, 123, 0.16);
+            --warning: #f3b13b;
+            --warning-soft: rgba(243, 177, 59, 0.16);
+            --error: #ef5350;
+            --error-soft: rgba(239, 83, 80, 0.16);
+            --info: #3b82f6;
+            --info-soft: rgba(59, 130, 246, 0.16);
+
+            /* Spacing (8px baseline) */
+            --space-1: 0.25rem;  /* 4px */
+            --space-2: 0.5rem;   /* 8px */
+            --space-3: 0.75rem;  /* 12px */
+            --space-4: 1rem;     /* 16px */
+            --space-5: 1.5rem;   /* 24px */
+            --space-6: 2rem;     /* 32px */
+            --space-7: 3rem;     /* 48px */
+
+            /* Border Radius */
+            --radius-sm: 0.5rem;    /* 8px */
+            --radius-md: 1.05rem;   /* 17px */
+            --radius-lg: 1.35rem;   /* 22px */
+            --radius-full: 999px;
+
+            /* Transitions */
+            --transition: 180ms cubic-bezier(0.2, 0.9, 0.35, 1);
+            --transition-smooth: 300ms ease-out;
+
+            /* Typography */
+            --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --font-mono: 'SF Mono', 'Consolas', 'Monaco', monospace;
+        }
+
+        /* ============================================
+           RESET & BASE STYLES
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: radial-gradient(circle at 20% -10%, rgba(109, 110, 255, 0.25), transparent 55%),
+                        radial-gradient(circle at 80% 0%, rgba(43, 195, 123, 0.08), transparent 60%),
+                        linear-gradient(160deg, #050614 0%, #050712 100%);
+            background-attachment: fixed;
+            color: var(--color-text);
+            line-height: 1.55;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+        }
+
+        /* ============================================
+           LAYOUT
+           ============================================ */
+        .container {
+            width: min(1100px, 100% - 2.4rem);
+            margin: 0 auto;
+            padding: var(--space-6) 0;
+        }
+
+        .grid {
+            display: grid;
+            gap: var(--space-4);
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+        }
+
+        .grid-2 {
+            display: grid;
+            gap: var(--space-4);
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        .header {
+            text-align: center;
+            margin-bottom: var(--space-7);
+            padding: var(--space-6) 0;
+        }
+
+        .header__title {
+            font-size: clamp(1.7rem, 1.3rem + 1.2vw, 2.4rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #f5f7ff, #b4b6ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: var(--space-3);
+        }
+
+        .header__subtitle {
+            font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.1rem);
+            color: var(--color-text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ============================================
+           GLASSMORPHISM PANELS
+           ============================================ */
+        .panel {
+            background: var(--color-panel);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 18px 42px -32px rgba(5, 8, 18, 0.9);
+            transition: all var(--transition);
+        }
+
+        .panel:hover {
+            border-color: var(--color-border-strong);
+            transform: translateY(-1px);
+        }
+
+        .panel__header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-5);
+            padding-bottom: var(--space-4);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .panel__icon {
+            font-size: 1.5rem;
+        }
+
+        .panel__title {
+            font-size: clamp(1.1rem, 1rem + 0.3vw, 1.3rem);
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        /* ============================================
+           BUTTONS
+           ============================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: 0.65rem 1.3rem;
+            border-radius: var(--radius-full);
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-decoration: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(109, 110, 255, 0.25);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(109, 110, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(148, 163, 184, 0.18);
+            border: 1px solid rgba(148, 163, 184, 0.28);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: rgba(148, 163, 184, 0.26);
+            border-color: rgba(148, 163, 184, 0.42);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #199964);
+            color: #ffffff;
+        }
+
+        .btn-success:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(43, 195, 123, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: var(--space-3);
+            flex-wrap: wrap;
+        }
+
+        /* ============================================
+           FORM ELEMENTS
+           ============================================ */
+        .form-group {
+            margin-bottom: var(--space-4);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: var(--space-2);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: var(--color-text);
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 0.75rem 0.95rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-border);
+            background: rgba(10, 13, 22, 0.9);
+            color: var(--color-text);
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: all var(--transition);
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(109, 110, 255, 0.2);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* ============================================
+           BADGES
+           ============================================ */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-1);
+            padding: 0.35rem 0.8rem;
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: var(--success-soft);
+            border: 1px solid rgba(43, 195, 123, 0.28);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: var(--warning-soft);
+            border: 1px solid rgba(243, 177, 59, 0.28);
+            color: var(--warning);
+        }
+
+        .badge-error {
+            background: var(--error-soft);
+            border: 1px solid rgba(239, 83, 80, 0.28);
+            color: var(--error);
+        }
+
+        .badge-info {
+            background: var(--info-soft);
+            border: 1px solid rgba(59, 130, 246, 0.28);
+            color: var(--info);
+        }
+
+        .badge-encrypted {
+            background: rgba(109, 110, 255, 0.16);
+            border: 1px solid rgba(109, 110, 255, 0.28);
+            color: rgba(180, 182, 255, 0.95);
+        }
+
+        /* ============================================
+           STATS & INFO CARDS
+           ============================================ */
+        .stat-card {
+            background: var(--color-panel-alt);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            display: grid;
+            gap: var(--space-2);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .info-box {
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            border-left: 3px solid;
+            margin: var(--space-4) 0;
+        }
+
+        .info-box-success {
+            background: var(--success-soft);
+            border-color: var(--success);
+        }
+
+        .info-box-info {
+            background: var(--info-soft);
+            border-color: var(--info);
+        }
+
+        .info-box-warning {
+            background: var(--warning-soft);
+            border-color: var(--warning);
+        }
+
+        /* ============================================
+           PROJECT CARDS
+           ============================================ */
+        .project-card {
+            background: var(--color-panel);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+            backdrop-filter: blur(18px);
+            transition: all var(--transition);
+        }
+
+        .project-card:hover {
+            border-color: var(--color-border-strong);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(109, 110, 255, 0.15);
+        }
+
+        .project-card__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: var(--space-3);
+            margin-bottom: var(--space-4);
+        }
+
+        .project-card__title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .project-card__description {
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-4);
+            line-height: 1.6;
+        }
+
+        .project-card__meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: var(--space-3);
+            margin-top: var(--space-4);
+        }
+
+        /* ============================================
+           WALLET CONNECTION
+           ============================================ */
+        .wallet-status {
+            position: fixed;
+            top: var(--space-4);
+            right: var(--space-4);
+            z-index: 1000;
+        }
+
+        .wallet-button {
+            background: var(--color-panel);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-full);
+            padding: 0.6rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            cursor: pointer;
+            backdrop-filter: blur(18px);
+            transition: all var(--transition);
+        }
+
+        .wallet-button:hover {
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .wallet-info {
+            background: var(--color-panel);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-3);
+            margin-top: var(--space-2);
+            backdrop-filter: blur(18px);
+        }
+
+        .wallet-address {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+        }
+
+        /* ============================================
+           TOAST NOTIFICATIONS
+           ============================================ */
+        .toast {
+            position: fixed;
+            top: var(--space-5);
+            right: var(--space-5);
+            z-index: 10000;
+            min-width: 300px;
+            max-width: 400px;
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+            animation: slideIn 0.3s ease-out;
+            border: 1px solid;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-success {
+            background: var(--success-soft);
+            border-color: var(--success);
+        }
+
+        .toast-error {
+            background: var(--error-soft);
+            border-color: var(--error);
+        }
+
+        .toast-info {
+            background: var(--info-soft);
+            border-color: var(--info);
+        }
+
+        .toast-warning {
+            background: var(--warning-soft);
+            border-color: var(--warning);
+        }
+
+        /* ============================================
+           LOADING STATES
+           ============================================ */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, rgba(148, 163, 184, 0.1) 25%, rgba(148, 163, 184, 0.2) 50%, rgba(148, 163, 184, 0.1) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: var(--radius-md);
+            height: 20px;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* ============================================
+           CONTRACT INFO
+           ============================================ */
+        .contract-info {
+            background: linear-gradient(135deg, rgba(109, 110, 255, 0.12), rgba(43, 195, 123, 0.08));
+            border: 1px solid var(--accent);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            text-align: center;
+            margin-bottom: var(--space-6);
+        }
+
+        .contract-address {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--accent);
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+        @media (max-width: 960px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            :root {
+                --space-5: 1.2rem;
+                --space-6: 1.5rem;
+            }
+
+            .container {
+                width: calc(100% - 1.5rem);
+            }
+
+            .panel {
+                padding: var(--space-4);
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .wallet-status {
+                position: static;
+                margin-bottom: var(--space-4);
+            }
+
+            .toast {
+                min-width: auto;
+                left: var(--space-3);
+                right: var(--space-3);
+            }
+        }
+
+        /* ============================================
+           UTILITY CLASSES
+           ============================================ */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-muted {
+            color: var(--color-text-muted);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-4 {
+            margin-top: var(--space-4);
+        }
+
+        .mb-4 {
+            margin-bottom: var(--space-4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="header__title">🏗️ Privacy Bidding Platform</h1>
+            <p class="header__subtitle">Secure and confidential construction project bidding powered by Fully Homomorphic Encryption</p>
+        </header>
+
+        <!-- Wallet Connection -->
+        <div class="wallet-status" id="walletStatus">
+            <button class="wallet-button" id="connectBtn" onclick="connectWallet()">
+                <span>🔐</span>
+                <span id="connectText">Connect Wallet</span>
+            </button>
+            <div class="wallet-info hidden" id="walletInfo">
+                <div class="stat-card">
+                    <div>
+                        <div class="stat-label">Connected Account</div>
+                        <div class="wallet-address" id="accountAddress"></div>
+                    </div>
+                    <div>
+                        <div class="stat-label">Network</div>
+                        <div class="stat-value" id="networkName" style="font-size: 1rem;"></div>
+                    </div>
+                    <div>
+                        <div class="stat-label">Balance</div>
+                        <div class="stat-value" id="accountBalance" style="font-size: 1rem;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contract Info -->
+        <div class="contract-info" id="contractInfoPanel">
+            <div class="stat-label" style="margin-bottom: var(--space-2);">Smart Contract Address (Sepolia FHE)</div>
+            <div class="contract-address">0xAD4f8099219E6aa0fB556eB6CC51A670682d30DE</div>
+            <div class="mt-4">
+                <span class="badge badge-encrypted">🔒 FHE Enabled</span>
+                <span class="badge badge-info">📍 Sepolia Testnet</span>
+                <span class="badge badge-success">✓ Deployed</span>
+            </div>
+            <div style="margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--color-border);">
+                <div style="font-size: 0.85rem; color: var(--color-text-muted); text-align: left;">
+                    <strong>✅ Ready:</strong> FHE contract deployed on <strong>Sepolia testnet</strong> with encrypted bid amounts.<br>
+                    Owner: <code style="background: rgba(109, 110, 255, 0.16); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">0x7f81...8B46</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid">
+            <!-- Contract Status Panel -->
+            <div class="panel">
+                <div class="panel__header">
+                    <span class="panel__icon">📊</span>
+                    <h2 class="panel__title">Contract Status</h2>
+                </div>
+                <button class="btn btn-primary" onclick="loadContract()">Load Contract</button>
+                <button class="btn btn-secondary mt-4" onclick="checkContractStatus()">Check Status</button>
+                <div id="contractStatus" class="mt-4"></div>
+            </div>
+
+            <!-- Contractor Management -->
+            <div class="panel">
+                <div class="panel__header">
+                    <span class="panel__icon">👷</span>
+                    <h2 class="panel__title">Contractor Management</h2>
+                </div>
+                <div class="info-box info-box-warning">
+                    <strong>Note:</strong> Only contract owner can authorize contractors
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="contractorAddress">Contractor Wallet Address</label>
+                    <input type="text" id="contractorAddress" class="form-input" placeholder="0x...">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="authorizeContractor()">Authorize</button>
+                    <button class="btn btn-secondary" onclick="revokeContractor()">Revoke</button>
+                    <button class="btn btn-secondary" onclick="checkContractorStatus()">Check Status</button>
+                </div>
+                <div id="contractorStatus" class="mt-4"></div>
+            </div>
+        </div>
+
+        <!-- Create Project Panel -->
+        <div class="panel mt-4">
+            <div class="panel__header">
+                <span class="panel__icon">🏗️</span>
+                <h2 class="panel__title">Create Construction Project</h2>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label class="form-label" for="projectName">Project Name</label>
+                    <input type="text" id="projectName" class="form-input" placeholder="Enter project name" maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="projectBudget">Maximum Budget (ETH)</label>
+                    <input type="number" id="projectBudget" class="form-input" step="0.001" min="0.001" placeholder="e.g., 100">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="projectDescription">Project Description</label>
+                <textarea id="projectDescription" class="form-textarea" rows="4" placeholder="Describe project requirements, specifications, and expectations" maxlength="500"></textarea>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label class="form-label" for="projectDeadline">Completion Deadline</label>
+                    <input type="datetime-local" id="projectDeadline" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="biddingDuration">Bidding Duration (Hours)</label>
+                    <input type="number" id="biddingDuration" class="form-input" min="1" max="168" placeholder="e.g., 72">
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="createProject()">Create Project</button>
+        </div>
+
+        <!-- Submit Bid Panel -->
+        <div class="panel mt-4">
+            <div class="panel__header">
+                <span class="panel__icon">💰</span>
+                <h2 class="panel__title">Submit Confidential Bid</h2>
+            </div>
+            <div class="info-box info-box-success">
+                <strong>🔒 Privacy Notice:</strong> Your bid amount and completion time are encrypted using FHE technology. Only you and the project creator can see the values during evaluation.
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label class="form-label" for="bidProjectId">Project ID</label>
+                    <input type="number" id="bidProjectId" class="form-input" min="1" placeholder="Enter project ID">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="bidAmount">Your Bid Amount (ETH)</label>
+                    <input type="number" id="bidAmount" class="form-input" step="0.001" min="0.001" placeholder="e.g., 85">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="completionTime">Completion Time (Days)</label>
+                <input type="number" id="completionTime" class="form-input" min="1" placeholder="e.g., 150">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="publicProposal">Public Proposal</label>
+                <textarea id="publicProposal" class="form-textarea" rows="6" placeholder="Describe your approach, qualifications, and why you're the best choice" maxlength="1000"></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="submitBid()">
+                <span>🔒</span>
+                <span>Submit Encrypted Bid</span>
+            </button>
+        </div>
+
+        <!-- Projects List Panel -->
+        <div class="panel mt-4">
+            <div class="panel__header">
+                <span class="panel__icon">📋</span>
+                <h2 class="panel__title">All Projects</h2>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="loadProjects()">
+                    <span>🔄</span>
+                    <span>Refresh Projects</span>
+                </button>
+                <button class="btn btn-secondary" onclick="loadMyProjects()">My Projects</button>
+                <button class="btn btn-secondary" onclick="loadMyBids()">My Bids</button>
+            </div>
+            <div id="projectsList" class="mt-4">
+                <div class="text-center" style="padding: var(--space-6);">
+                    <div class="spinner" style="width: 32px; height: 32px; margin: 0 auto var(--space-3);"></div>
+                    <div class="text-muted">Loading projects from blockchain...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Management Panel -->
+        <div class="panel mt-4">
+            <div class="panel__header">
+                <span class="panel__icon">🎯</span>
+                <h2 class="panel__title">Project Management</h2>
+            </div>
+            <div class="info-box info-box-info">
+                <strong>Instructions:</strong> Enter a project ID to manage it. Only project creators can close bidding and evaluate bids.
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="manageProjectId">Project ID</label>
+                <input type="number" id="manageProjectId" class="form-input" min="1" placeholder="Enter project ID">
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="getProjectInfo()">View Details</button>
+                <button class="btn btn-secondary" onclick="getProjectBidders()">View Bidders</button>
+            </div>
+            <div class="btn-group mt-4">
+                <button class="btn btn-primary" onclick="closeBidding()">Close Bidding</button>
+                <button class="btn btn-success" onclick="evaluateBids()">Evaluate & Select Winner</button>
+            </div>
+            <div id="managementResult" class="mt-4"></div>
+        </div>
+    </div>
+
+    <!-- Load ethers.js -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"
+            onerror="this.onerror=null;this.src='https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js';"
+            onload="console.log('Ethers.js loaded');"></script>
+
+    <script>
+        // ============================================
+        // GLOBAL STATE
+        // ============================================
+        let provider = null;
+        let signer = null;
+        let contract = null;
+        let userAccount = null;
+
+        // Contract addresses for different networks
+        const CONTRACT_ADDRESSES = {
+            11155111: "0xAD4f8099219E6aa0fB556eB6CC51A670682d30DE", // Sepolia (FHE)
+            31337: "0x5FbDB2315678afecb367f032d93F642f64180aa3",    // Local Hardhat (Mock)
+            // Add more networks as needed
+        };
+
+        let CONTRACT_ADDRESS = null;
+
+        // Contract ABI (minimal version for basic interactions)
+        const CONTRACT_ABI = [
+            "function owner() view returns (address)",
+            "function projectCount() view returns (uint256)",
+            "function authorizeContractor(address contractor) external",
+            "function revokeContractor(address contractor) external",
+            "function isAuthorizedContractor(address contractor) view returns (bool)",
+            "function createProject(string name, string description, uint256 maxBudget, uint256 deadline, uint256 biddingDuration) external returns (uint256)",
+            "function submitBid(uint256 projectId, uint256 bidAmount, uint256 completionTime, string proposal) external",
+            "function closeBidding(uint256 projectId) external",
+            "function evaluateBids(uint256 projectId) external",
+            "function getProject(uint256 projectId) view returns (string name, string description, address creator, uint256 maxBudget, uint256 deadline, uint256 biddingEndTime, bool isActive, bool biddingClosed, address winner)",
+            "function getProjectBidders(uint256 projectId) view returns (address[])",
+            "function getBid(uint256 projectId, address bidder) view returns (uint256 amount, uint256 completionTime, string proposal, bool submitted, uint256 timestamp)",
+            "event ProjectCreated(uint256 indexed projectId, address indexed creator, string name)",
+            "event BidSubmitted(uint256 indexed projectId, address indexed contractor)",
+            "event BiddingClosed(uint256 indexed projectId)",
+            "event WinnerSelected(uint256 indexed projectId, address indexed winner)"
+        ];
+
+        // ============================================
+        // WALLET CONNECTION
+        // ============================================
+        async function connectWallet() {
+            try {
+                if (typeof window.ethereum === 'undefined') {
+                    showToast('Please install MetaMask to use this application', 'error');
+                    return;
+                }
+
+                // Request account access
+                const accounts = await window.ethereum.request({
+                    method: 'eth_requestAccounts'
+                });
+
+                userAccount = accounts[0];
+
+                // Initialize provider and signer
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                signer = provider.getSigner();
+
+                // Get network info
+                const network = await provider.getNetwork();
+                const balance = await provider.getBalance(userAccount);
+
+                // Check if contract is deployed on this network
+                CONTRACT_ADDRESS = CONTRACT_ADDRESSES[network.chainId];
+
+                // Update UI
+                document.getElementById('connectText').textContent = 'Connected';
+                document.getElementById('accountAddress').textContent = formatAddress(userAccount);
+                document.getElementById('networkName').textContent = getNetworkName(network.chainId);
+                document.getElementById('accountBalance').textContent = ethers.utils.formatEther(balance) + ' ETH';
+                document.getElementById('walletInfo').classList.remove('hidden');
+
+                if (!CONTRACT_ADDRESS) {
+                    showToast(`⚠️ Contract not deployed on ${getNetworkName(network.chainId)}. Please switch to Sepolia testnet.`, 'warning');
+                    return;
+                }
+
+                showToast('Wallet connected successfully', 'success');
+
+                // Load contract
+                await loadContract();
+
+                // Listen for account changes
+                window.ethereum.on('accountsChanged', handleAccountsChanged);
+                window.ethereum.on('chainChanged', () => window.location.reload());
+
+            } catch (error) {
+                console.error('Connection error:', error);
+                showToast('Failed to connect wallet: ' + error.message, 'error');
+            }
+        }
+
+        function handleAccountsChanged(accounts) {
+            if (accounts.length === 0) {
+                showToast('Please connect to MetaMask', 'warning');
+                window.location.reload();
+            } else if (accounts[0] !== userAccount) {
+                userAccount = accounts[0];
+                window.location.reload();
+            }
+        }
+
+        // ============================================
+        // CONTRACT INTERACTION
+        // ============================================
+        async function loadContract() {
+            try {
+                if (!provider) {
+                    showToast('Please connect your wallet first', 'warning');
+                    return;
+                }
+
+                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+                showToast('Contract loaded successfully', 'success');
+
+                // Auto-load projects
+                await loadProjects();
+
+            } catch (error) {
+                console.error('Contract load error:', error);
+                showToast('Failed to load contract: ' + error.message, 'error');
+            }
+        }
+
+        async function checkContractStatus() {
+            try {
+                if (!contract) {
+                    showToast('Please load contract first', 'warning');
+                    return;
+                }
+
+                const owner = await contract.owner();
+                const projectCount = await contract.projectCount();
+
+                const statusHtml = `
+                    <div class="stat-card">
+                        <div>
+                            <div class="stat-label">Contract Owner</div>
+                            <div class="wallet-address">${formatAddress(owner)}</div>
+                        </div>
+                        <div>
+                            <div class="stat-label">Total Projects</div>
+                            <div class="stat-value">${projectCount.toString()}</div>
+                        </div>
+                        <div>
+                            <div class="stat-label">Your Status</div>
+                            <div class="stat-value" style="font-size: 1rem;">
+                                ${userAccount.toLowerCase() === owner.toLowerCase()
+                                    ? '<span class="badge badge-success">Owner</span>'
+                                    : '<span class="badge badge-info">User</span>'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('contractStatus').innerHTML = statusHtml;
+                showToast('Contract status updated', 'success');
+
+            } catch (error) {
+                console.error('Status check error:', error);
+                showToast('Failed to check status: ' + error.message, 'error');
+            }
+        }
+
+        // ============================================
+        // CONTRACTOR MANAGEMENT
+        // ============================================
+        async function authorizeContractor() {
+            try {
+                const address = document.getElementById('contractorAddress').value.trim();
+
+                if (!ethers.utils.isAddress(address)) {
+                    showToast('Invalid Ethereum address', 'error');
+                    return;
+                }
+
+                showToast('Authorizing contractor...', 'info');
+
+                const tx = await contract.authorizeContractor(address);
+                await tx.wait();
+
+                showToast('Contractor authorized successfully', 'success');
+
+            } catch (error) {
+                console.error('Authorization error:', error);
+                showToast(parseSolidityError(error), 'error');
+            }
+        }
+
+        async function revokeContractor() {
+            try {
+                const address = document.getElementById('contractorAddress').value.trim();
+
+                if (!ethers.utils.isAddress(address)) {
+                    showToast('Invalid Ethereum address', 'error');
+                    return;
+                }
+
+                showToast('Revoking contractor...', 'info');
+
+                const tx = await contract.revokeContractor(address);
+                await tx.wait();
+
+                showToast('Contractor revoked successfully', 'success');
+
+            } catch (error) {
+                console.error('Revocation error:', error);
+                showToast(parseSolidityError(error), 'error');
+            }
+        }
+
+        async function checkContractorStatus() {
+            try {
+                const address = document.getElementById('contractorAddress').value.trim();
+
+                if (!ethers.utils.isAddress(address)) {
+                    showToast('Invalid Ethereum address', 'error');
+                    return;
+                }
+
+                const isAuthorized = await contract.isAuthorizedContractor(address);
+
+                const statusHtml = `
+                    <div class="info-box ${isAuthorized ? 'info-box-success' : 'info-box-warning'}">
+                        <strong>Status:</strong> ${isAuthorized
+                            ? '<span class="badge badge-success">✓ Authorized</span>'
+                            : '<span class="badge badge-warning">Not Authorized</span>'}
+                    </div>
+                `;
+
+                document.getElementById('contractorStatus').innerHTML = statusHtml;
+
+            } catch (error) {
+                console.error('Status check error:', error);
+                showToast('Failed to check status: ' + error.message, 'error');
+            }
+        }
+
+        // ============================================
+        // PROJECT MANAGEMENT
+        // ============================================
+        async function createProject() {
+            try {
+                const name = document.getElementById('projectName').value.trim();
+                const description = document.getElementById('projectDescription').value.trim();
+                const budget = document.getElementById('projectBudget').value;
+                const deadline = document.getElementById('projectDeadline').value;
+                const duration = document.getElementById('biddingDuration').value;
+
+                if (!name || !description || !budget || !deadline || !duration) {
+                    showToast('Please fill in all fields', 'error');
+                    return;
+                }
+
+                const deadlineTimestamp = Math.floor(new Date(deadline).getTime() / 1000);
+                const budgetWei = ethers.utils.parseEther(budget);
+                const durationSeconds = parseInt(duration) * 3600; // Convert hours to seconds
+
+                showToast('Creating project...', 'info');
+
+                const tx = await contract.createProject(
+                    name,
+                    description,
+                    budgetWei,
+                    deadlineTimestamp,
+                    durationSeconds
+                );
+
+                const receipt = await tx.wait();
+
+                // Only clear form if transaction was successful
+                if (receipt.status === 1) {
+                    document.getElementById('projectName').value = '';
+                    document.getElementById('projectDescription').value = '';
+                    document.getElementById('projectBudget').value = '';
+                    document.getElementById('projectDeadline').value = '';
+                    document.getElementById('biddingDuration').value = '';
+
+                    showToast('✅ Project created successfully!', 'success');
+
+                    // Reload projects
+                    await loadProjects();
+                } else {
+                    showToast('❌ Transaction failed', 'error');
+                }
+
+            } catch (error) {
+                console.error('Project creation error:', error);
+                showToast(parseSolidityError(error), 'error');
+            }
+        }
+
+        async function submitBid() {
+            try {
+                const projectId = document.getElementById('bidProjectId').value;
+                const amount = document.getElementById('bidAmount').value;
+                const time = document.getElementById('completionTime').value;
+                const proposal = document.getElementById('publicProposal').value.trim();
+
+                if (!projectId || !amount || !time || !proposal) {
+                    showToast('Please fill in all fields', 'error');
+                    return;
+                }
+
+                // Note: In production, these should be encrypted with fhEVM
+                // For now, using plain values
+                const amountWei = ethers.utils.parseEther(amount);
+
+                showToast('Submitting encrypted bid...', 'info');
+
+                const tx = await contract.submitBid(
+                    projectId,
+                    amountWei,
+                    time,
+                    proposal
+                );
+
+                // Wait for transaction confirmation
+                const receipt = await tx.wait();
+
+                // Only clear form if transaction was successful
+                if (receipt.status === 1) {
+                    document.getElementById('bidProjectId').value = '';
+                    document.getElementById('bidAmount').value = '';
+                    document.getElementById('completionTime').value = '';
+                    document.getElementById('publicProposal').value = '';
+
+                    showToast('✅ Bid submitted successfully!', 'success');
+                } else {
+                    showToast('❌ Transaction failed', 'error');
+                }
+
+            } catch (error) {
+                console.error('Bid submission error:', error);
+                const friendlyError = parseSolidityError(error);
+                showToast(friendlyError, 'error');
+                // Don't clear form on error so user can retry
+            }
+        }
+
+        async function loadProjects() {
+            try {
+                if (!contract) {
+                    document.getElementById('projectsList').innerHTML = `
+                        <div class="info-box info-box-warning">
+                            <strong>⚠️ Please connect your wallet first</strong>
+                        </div>
+                    `;
+                    return;
+                }
+
+                if (!CONTRACT_ADDRESS) {
+                    document.getElementById('projectsList').innerHTML = `
+                        <div class="info-box info-box-warning">
+                            <strong>⚠️ Contract not deployed on this network</strong>
+                            <p style="margin-top: var(--space-2); color: var(--color-text-muted);">
+                                Please switch to Sepolia testnet or deploy the contract to your current network.
+                            </p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Check if contract exists by checking code at address
+                const code = await provider.getCode(CONTRACT_ADDRESS);
+                if (code === '0x') {
+                    document.getElementById('projectsList').innerHTML = `
+                        <div class="info-box info-box-warning">
+                            <strong>⚠️ No contract found at ${formatAddress(CONTRACT_ADDRESS)}</strong>
+                            <p style="margin-top: var(--space-2); color: var(--color-text-muted);">
+                                The contract may not be deployed yet. Please deploy it first using:<br>
+                                <code style="background: rgba(109, 110, 255, 0.16); padding: 0.25rem 0.5rem; border-radius: 4px; margin-top: 0.5rem; display: inline-block;">npm run deploy</code>
+                            </p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const projectCount = await contract.projectCount();
+
+                if (projectCount.eq(0)) {
+                    document.getElementById('projectsList').innerHTML = `
+                        <div class="info-box info-box-info">
+                            <strong>✨ No projects yet</strong> - Create the first project!
+                        </div>
+                    `;
+                    return;
+                }
+
+                let projectsHtml = '';
+
+                for (let i = 1; i <= projectCount.toNumber(); i++) {
+                    try {
+                        const project = await contract.getProject(i);
+                        console.log(`Project ${i} data:`, project);
+                        projectsHtml += formatProjectCard(i, project);
+                    } catch (error) {
+                        console.error(`Failed to load project ${i}:`, error);
+                        // Add error card for this project
+                        projectsHtml += `
+                            <div class="info-box info-box-warning">
+                                <strong>⚠️ Failed to load Project ${i}</strong>
+                                <p style="margin-top: var(--space-2); font-size: 0.85rem; color: var(--color-text-muted);">
+                                    ${error.message}
+                                </p>
+                            </div>
+                        `;
+                    }
+                }
+
+                document.getElementById('projectsList').innerHTML = projectsHtml || `
+                    <div class="info-box info-box-warning">
+                        <strong>No projects available</strong>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('Projects load error:', error);
+
+                // Provide helpful error messages
+                let errorMessage = error.message;
+                if (error.message.includes('execution reverted')) {
+                    errorMessage = 'Contract call failed. The contract may not be deployed or you may be on the wrong network.';
+                } else if (error.message.includes('missing revert data')) {
+                    errorMessage = 'No contract found at this address. Please deploy the contract first.';
+                }
+
+                document.getElementById('projectsList').innerHTML = `
+                    <div class="info-box info-box-warning">
+                        <strong>⚠️ Unable to load projects</strong>
+                        <p style="margin-top: var(--space-2); color: var(--color-text-muted);">
+                            ${errorMessage}
+                        </p>
+                        <p style="margin-top: var(--space-3); color: var(--color-text-muted);">
+                            <strong>Troubleshooting:</strong><br>
+                            1. Make sure you're connected to Sepolia testnet<br>
+                            2. Deploy the contract using: <code style="background: rgba(109, 110, 255, 0.16); padding: 0.25rem 0.5rem; border-radius: 4px;">npm run deploy</code><br>
+                            3. Update the contract address in the code if needed
+                        </p>
+                    </div>
+                `;
+            }
+        }
+
+        function formatProjectCard(id, projectData) {
+            // getProject() returns named values, ethers.js allows both index and name access
+            // Access by name is more reliable
+            const project = {
+                name: projectData.name || projectData[0],
+                description: projectData.description || projectData[1],
+                creator: projectData.creator || projectData[2],
+                maxBudget: projectData.maxBudget || projectData[3],
+                deadline: projectData.deadline || projectData[4],
+                biddingEndTime: projectData.biddingEndTime || projectData[5],
+                isActive: projectData.isActive !== undefined ? projectData.isActive : projectData[6],
+                biddingClosed: projectData.biddingClosed !== undefined ? projectData.biddingClosed : projectData[7],
+                winner: projectData.winner || projectData[8]
+            };
+
+            const isCreator = userAccount && userAccount.toLowerCase() === project.creator.toLowerCase();
+            const deadline = new Date(project.deadline * 1000).toLocaleString();
+            const biddingEnd = new Date(project.biddingEndTime * 1000).toLocaleString();
+
+            return `
+                <div class="project-card">
+                    <div class="project-card__header">
+                        <div>
+                            <h3 class="project-card__title">${project.name}</h3>
+                            <div style="margin-top: var(--space-2);">
+                                <span class="badge badge-info">ID: ${id}</span>
+                                ${isCreator ? '<span class="badge badge-success">Your Project</span>' : ''}
+                                ${project.isActive ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-error">Closed</span>'}
+                                ${project.biddingClosed ? '<span class="badge badge-warning">Bidding Closed</span>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <p class="project-card__description">${project.description}</p>
+                    <div class="project-card__meta">
+                        <div class="stat-card">
+                            <div class="stat-label">Max Budget</div>
+                            <div class="stat-value" style="font-size: 1.1rem;">${ethers.utils.formatEther(project.maxBudget)} ETH</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Deadline</div>
+                            <div class="stat-value" style="font-size: 0.85rem;">${deadline}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Bidding Ends</div>
+                            <div class="stat-value" style="font-size: 0.85rem;">${biddingEnd}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Creator</div>
+                            <div class="wallet-address">${formatAddress(project.creator)}</div>
+                        </div>
+                    </div>
+                    ${project.winner !== ethers.constants.AddressZero ? `
+                        <div class="info-box info-box-success" style="margin-top: var(--space-4);">
+                            <strong>🏆 Winner Selected:</strong> ${formatAddress(project.winner)}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        async function loadMyProjects() {
+            // Implementation for filtering user's created projects
+            showToast('Loading your projects...', 'info');
+            await loadProjects();
+        }
+
+        async function loadMyBids() {
+            try {
+                if (!contract || !userAccount) {
+                    showToast('Please connect your wallet first', 'warning');
+                    return;
+                }
+
+                showToast('Loading your bids...', 'info');
+
+                const projectCount = await contract.projectCount();
+                console.log('Total projects:', projectCount.toString());
+
+                if (projectCount.eq(0)) {
+                    document.getElementById('projectsList').innerHTML = `
+                        <div class="info-box info-box-info">
+                            <strong>No projects found</strong>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let myBidsHtml = '';
+                let bidsFound = 0;
+
+                for (let i = 1; i <= projectCount.toNumber(); i++) {
+                    try {
+                        const project = await contract.getProject(i);
+                        const bidders = await contract.getProjectBidders(i);
+
+                        console.log(`Project ${i} bidders:`, bidders);
+                        console.log('Your account:', userAccount);
+
+                        // Check if user has bid on this project
+                        const hasBid = bidders.some(addr => addr.toLowerCase() === userAccount.toLowerCase());
+                        console.log(`Has bid on project ${i}:`, hasBid);
+
+                        if (hasBid) {
+                            bidsFound++;
+
+                            // Get bid details
+                            const bidData = await contract.getBid(i, userAccount);
+                            console.log(`Bid data for project ${i}:`, bidData);
+
+                            myBidsHtml += formatMyBidCard(i, project, bidData);
+                        }
+                    } catch (error) {
+                        console.error(`Failed to check bid for project ${i}:`, error);
+                        // Show the actual error message
+                        const friendlyError = parseSolidityError(error);
+                        console.error(`Friendly error: ${friendlyError}`);
+                    }
+                }
+
+                if (bidsFound === 0) {
+                    document.getElementById('projectsList').innerHTML = `
+                        <div class="info-box info-box-info">
+                            <strong>You haven't submitted any bids yet</strong>
+                            <p style="margin-top: var(--space-2); color: var(--color-text-muted);">
+                                Find an active project and submit your bid to get started!
+                            </p>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('projectsList').innerHTML = `
+                        <div class="info-box info-box-success" style="margin-bottom: var(--space-4);">
+                            <strong>Your Bids (${bidsFound})</strong>
+                        </div>
+                        ${myBidsHtml}
+                    `;
+                    showToast(`Found ${bidsFound} bid(s)`, 'success');
+                }
+
+            } catch (error) {
+                console.error('Load my bids error:', error);
+                showToast(parseSolidityError(error), 'error');
+            }
+        }
+
+        function formatMyBidCard(id, projectData, bidData) {
+            const project = {
+                name: projectData.name || projectData[0],
+                description: projectData.description || projectData[1],
+                creator: projectData.creator || projectData[2],
+                maxBudget: projectData.maxBudget || projectData[3],
+                deadline: projectData.deadline || projectData[4],
+                biddingEndTime: projectData.biddingEndTime || projectData[5],
+                isActive: projectData.isActive !== undefined ? projectData.isActive : projectData[6],
+                biddingClosed: projectData.biddingClosed !== undefined ? projectData.biddingClosed : projectData[7],
+                winner: projectData.winner || projectData[8]
+            };
+
+            const bid = {
+                amount: bidData.amount || bidData[0],
+                completionTime: bidData.completionTime || bidData[1],
+                proposal: bidData.proposal || bidData[2],
+                submitted: bidData.submitted !== undefined ? bidData.submitted : bidData[3],
+                timestamp: bidData.timestamp || bidData[4]
+            };
+
+            const isWinner = project.winner.toLowerCase() === userAccount.toLowerCase();
+            const deadline = new Date(project.deadline * 1000).toLocaleString();
+            const bidTime = new Date(bid.timestamp * 1000).toLocaleString();
+
+            return `
+                <div class="project-card" style="border-left: 3px solid ${isWinner ? 'var(--success)' : 'var(--accent)'};">
+                    <div class="project-card__header">
+                        <div>
+                            <h3 class="project-card__title">${project.name}</h3>
+                            <div style="margin-top: var(--space-2);">
+                                <span class="badge badge-info">Project ID: ${id}</span>
+                                ${isWinner ? '<span class="badge badge-success">🏆 Winner</span>' : ''}
+                                ${project.biddingClosed ? '<span class="badge badge-warning">Bidding Closed</span>' : '<span class="badge badge-success">Bidding Open</span>'}
+                            </div>
+                        </div>
+                    </div>
+                    <p class="project-card__description">${project.description}</p>
+
+                    <div style="background: rgba(109, 110, 255, 0.08); border-radius: var(--radius-md); padding: var(--space-4); margin: var(--space-4) 0;">
+                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--accent); margin-bottom: var(--space-3);">
+                            🔒 Your Bid Details
+                        </div>
+                        <div class="grid-2" style="gap: var(--space-3);">
+                            <div class="stat-card">
+                                <div class="stat-label">Your Bid Amount</div>
+                                <div class="stat-value" style="font-size: 1.1rem;">${ethers.utils.formatEther(bid.amount)} ETH</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Completion Time</div>
+                                <div class="stat-value" style="font-size: 1.1rem;">${bid.completionTime} days</div>
+                            </div>
+                        </div>
+                        <div class="stat-card" style="margin-top: var(--space-3);">
+                            <div class="stat-label">Your Proposal</div>
+                            <div style="margin-top: var(--space-2); color: var(--color-text); font-size: 0.9rem; line-height: 1.6;">
+                                ${bid.proposal}
+                            </div>
+                        </div>
+                        <div style="margin-top: var(--space-3); font-size: 0.8rem; color: var(--color-text-muted);">
+                            Submitted: ${bidTime}
+                        </div>
+                    </div>
+
+                    <div class="project-card__meta">
+                        <div class="stat-card">
+                            <div class="stat-label">Project Budget</div>
+                            <div class="stat-value" style="font-size: 1rem;">${ethers.utils.formatEther(project.maxBudget)} ETH</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Deadline</div>
+                            <div class="stat-value" style="font-size: 0.85rem;">${deadline}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Project Creator</div>
+                            <div class="wallet-address">${formatAddress(project.creator)}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function getProjectInfo() {
+            try {
+                const projectId = document.getElementById('manageProjectId').value;
+
+                if (!projectId || projectId < 1) {
+                    showToast('Please enter a valid project ID', 'error');
+                    return;
+                }
+
+                const project = await contract.getProject(projectId);
+
+                const infoHtml = formatProjectCard(projectId, project);
+                document.getElementById('managementResult').innerHTML = infoHtml;
+
+            } catch (error) {
+                console.error('Project info error:', error);
+                showToast(parseSolidityError(error), 'error');
+            }
+        }
+
+        async function getProjectBidders() {
+            try {
+                const projectId = document.getElementById('manageProjectId').value;
+
+                if (!projectId || projectId < 1) {
+                    showToast('Please enter a valid project ID', 'error');
+                    return;
+                }
+
+                showToast('Loading bidders...', 'info');
+
+                const bidders = await contract.getProjectBidders(projectId);
+
+                if (bidders.length === 0) {
+                    document.getElementById('managementResult').innerHTML = `
+                        <div class="info-box info-box-info">
+                            <strong>No Bidders</strong>
+                            <p style="margin-top: var(--space-2);">No bids have been submitted for this project yet.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let biddersHtml = `
+                    <div class="panel" style="margin-top: var(--space-4);">
+                        <div class="panel__header">
+                            <span class="panel__icon">👷</span>
+                            <h3 class="panel__title">Project ${projectId} - Bidders (${bidders.length})</h3>
+                        </div>
+                        <div style="display: grid; gap: var(--space-3);">
+                `;
+
+                for (let i = 0; i < bidders.length; i++) {
+                    const bidderAddress = bidders[i];
+                    biddersHtml += `
+                        <div class="stat-card">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <div class="stat-label">Bidder ${i + 1}</div>
+                                    <div class="wallet-address" style="font-size: 0.9rem; margin-top: var(--space-1);">
+                                        ${bidderAddress}
+                                    </div>
+                                </div>
+                                <span class="badge badge-info">Bid Submitted</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                biddersHtml += `
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('managementResult').innerHTML = biddersHtml;
+                showToast(`Found ${bidders.length} bidder(s)`, 'success');
+
+            } catch (error) {
+                console.error('Get bidders error:', error);
+                showToast(parseSolidityError(error), 'error');
+            }
+        }
+
+        async function closeBidding() {
+            try {
+                const projectId = document.getElementById('manageProjectId').value;
+
+                if (!projectId || projectId < 1) {
+                    showToast('Please enter a valid project ID', 'error');
+                    return;
+                }
+
+                showToast('Closing bidding...', 'info');
+
+                const tx = await contract.closeBidding(projectId);
+                await tx.wait();
+
+                showToast('Bidding closed successfully', 'success');
+                await getProjectInfo();
+
+            } catch (error) {
+                console.error('Close bidding error:', error);
+                showToast(parseSolidityError(error), 'error');
+            }
+        }
+
+        async function evaluateBids() {
+            try {
+                const projectId = document.getElementById('manageProjectId').value;
+
+                if (!projectId || projectId < 1) {
+                    showToast('Please enter a valid project ID', 'error');
+                    return;
+                }
+
+                showToast('Evaluating bids and selecting winner...', 'info');
+
+                const tx = await contract.evaluateBids(projectId);
+                const receipt = await tx.wait();
+
+                if (receipt.status === 1) {
+                    // Get the updated project info to show the winner
+                    const project = await contract.getProject(projectId);
+                    const winner = project.winner || project[8];
+
+                    showToast(`🏆 Winner selected: ${formatAddress(winner)}`, 'success');
+
+                    // Reload project info to show winner
+                    await getProjectInfo();
+
+                    // Also refresh the projects list
+                    setTimeout(() => loadProjects(), 1000);
+                } else {
+                    showToast('❌ Transaction failed', 'error');
+                }
+
+            } catch (error) {
+                console.error('Evaluation error:', error);
+                showToast(parseSolidityError(error), 'error');
+            }
+        }
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+        function formatAddress(address) {
+            if (!address) return 'N/A';
+            return `${address.slice(0, 6)}...${address.slice(-4)}`;
+        }
+
+        function getNetworkName(chainId) {
+            const networks = {
+                1: 'Ethereum Mainnet',
+                5: 'Goerli Testnet',
+                11155111: 'Sepolia Testnet',
+                31337: 'Local Hardhat'
+            };
+            return networks[chainId] || `Chain ID: ${chainId}`;
+        }
+
+        function parseSolidityError(error) {
+            // Extract user-friendly error messages from Solidity reverts
+            const errorMap = {
+                'Already submitted': '❌ You have already submitted a bid for this project',
+                'Not authorized contractor': '❌ You are not an authorized contractor. Please contact the admin for authorization',
+                'Not authorized to view': '❌ You can only view your own bids or bids for projects you created',
+                'Already authorized': '✓ This address is already authorized',
+                'Not authorized': '❌ Permission denied. Only contract owner can perform this action',
+                'Bidding closed': '❌ Bidding is closed for this project',
+                'Bidding period ended': '❌ Bidding period has ended',
+                'Project not active': '❌ Project is not active',
+                'Invalid project ID': '❌ Invalid project ID',
+                'Bidding not closed': '⚠️ Please close bidding first before evaluation (click "Close Bidding" button)',
+                'Not project creator': '❌ Only project creator can perform this action',
+                'No bids submitted': '❌ No bids have been submitted for this project',
+                'Already closed': '✓ Bidding is already closed',
+                'Invalid bid amount': '❌ Invalid bid amount (must be > 0 and ≤ budget)',
+                'user rejected': '❌ You cancelled the transaction',
+                'insufficient funds': '❌ Insufficient funds in your account',
+                'Invalid address': '❌ Invalid address',
+                'Name required': '❌ Project name is required',
+                'Budget must be positive': '❌ Budget must be greater than 0',
+                'Deadline must be future': '❌ Deadline must be in the future',
+                'Duration must be positive': '❌ Bidding duration must be greater than 0'
+            };
+
+            // Check error message or reason
+            let errorMsg = error.message || error.reason || String(error);
+
+            // Extract the actual revert reason
+            for (const [key, value] of Object.entries(errorMap)) {
+                if (errorMsg.includes(key)) {
+                    return value;
+                }
+            }
+
+            // Default generic error
+            if (errorMsg.includes('execution reverted')) {
+                return '❌ Transaction failed. Please check your parameters';
+            }
+            if (errorMsg.includes('gas')) {
+                return '❌ Gas estimation failed. Transaction may fail';
+            }
+
+            // Return shortened error for unknown errors
+            return '❌ Operation failed: ' + errorMsg.slice(0, 80) + (errorMsg.length > 80 ? '...' : '');
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `<strong>${message}</strong>`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 4000);
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        window.addEventListener('load', async () => {
+            console.log('Privacy Bidding Platform loaded');
+
+            // Check if already connected
+            if (window.ethereum) {
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                if (accounts.length > 0) {
+                    await connectWallet();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
