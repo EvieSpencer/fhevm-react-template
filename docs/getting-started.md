@@ -353,6 +353,60 @@ const handleSubmit = async (value) => {
 }
 ```
 
+## Example Applications
+
+### Level 1: Basic Encryption
+Location: `examples/basic-encryption/`
+
+Framework-agnostic example showing core SDK usage:
+```bash
+cd examples/basic-encryption
+npm install
+npm start
+```
+
+### Level 2: React Integration
+Location: `examples/react-integration/`
+
+React hooks integration example:
+```bash
+cd examples/react-integration
+npm install
+npm start
+```
+
+### Level 3: Advanced Bidding
+Location: `examples/advanced-usage/`
+
+Complete bidding component with smart contract integration:
+```bash
+cd examples/advanced-usage
+npm install
+npm start
+```
+
+### Level 4: Full Production Application
+Location: `examples/full-application/`
+
+Complete production-ready single-page application with:
+- Glassmorphism UI design
+- Deployed smart contract on Sepolia
+- Wallet integration and network detection
+- Project management and bidding system
+- Real-world use case demonstration
+
+```bash
+# Serve the application
+npx http-server examples/full-application -p 8080
+
+# Or open directly
+open examples/full-application/index.html
+```
+
+Live Demo: [https://eviespencer.github.io/ConstructionBidding/](https://eviespencer.github.io/ConstructionBidding/)
+
+See [examples/full-application/README.md](../examples/full-application/README.md) for complete documentation.
+
 ## Next Steps
 
 - [API Reference](./api-reference.md) - Complete API documentation

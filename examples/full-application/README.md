@@ -57,9 +57,24 @@ Using **Fully Homomorphic Encryption (FHE)**, this platform ensures:
 
 ## 🔐 FHE Integration
 
-### Smart Contract
+### Current Status
+
+**⚠️ Important Note**: This full-application example is currently a **UI/UX demonstration** showing the complete user interface and blockchain interaction flow. The smart contract on Sepolia **supports FHE** (uses `euint32` types), but the frontend **does not yet implement client-side encryption** with the SDK.
+
+**Why?**
+- This is a single HTML file (~2,500 lines) demonstrating the complete production UI
+- Client-side encryption requires build tools and module bundlers
+- The SDK is designed for TypeScript/JavaScript projects with npm/yarn
+
+**SDK Integration Status by Example**:
+- ✅ **examples/basic-encryption/** - Uses SDK core (framework-agnostic)
+- ✅ **examples/react-integration/** - Uses SDK React hooks
+- ✅ **examples/advanced-usage/** - Uses SDK with full bidding workflow
+- ⚠️ **examples/full-application/** - UI demo, SDK integration in progress
+
+### Smart Contract (FHE-Enabled)
 ```solidity
-// Encrypted bid data structure
+// Contract deployed on Sepolia supports FHE
 struct PrivateBid {
     euint32 encryptedAmount;           // FHE encrypted amount
     euint32 encryptedCompletionTime;   // FHE encrypted time
@@ -71,8 +86,8 @@ struct PrivateBid {
 // Submit encrypted bid
 function submitBid(
     uint256 projectId,
-    bytes calldata encryptedAmount,
-    bytes calldata encryptedTime,
+    bytes calldata encryptedAmount,    // ✅ Accepts encrypted bytes
+    bytes calldata encryptedTime,      // ✅ Accepts encrypted bytes
     string calldata proposal
 ) external {
     euint32 encAmount = FHE.asEuint32(encryptedAmount);
@@ -85,17 +100,17 @@ function submitBid(
 }
 ```
 
-### Frontend Integration
+### Frontend Integration (Current)
 ```javascript
-// Ethers.js v5 for blockchain interaction
+// Currently uses plain values for demonstration
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 
-// Submit bid with encrypted data
+// Submit bid - currently sends plain values
 const tx = await contract.submitBid(
     projectId,
-    amountWei,      // In production: encrypted with fhevmjs
-    time,           // In production: encrypted with fhevmjs
+    amountWei,      // ⚠️ Plain value (should be encrypted)
+    time,           // ⚠️ Plain value (should be encrypted)
     proposal
 );
 ```
@@ -210,23 +225,51 @@ Reduced deployment costs by 95%:
 ## 🎯 Next Steps for Production
 
 ### 1. Full FHE Integration
+
+To integrate the SDK into this application, you have two options:
+
+#### Option A: Use SDK Examples (Recommended)
+For actual encrypted bidding, use the SDK-integrated examples:
+- **examples/advanced-usage/BiddingExample.tsx** - Complete React component with SDK
+- **examples/basic-encryption/index.ts** - Core SDK usage
+- **examples/react-integration/App.tsx** - React hooks integration
+
+These examples demonstrate real client-side encryption using the SDK.
+
+#### Option B: Build Tool Integration
+To add SDK to this HTML file, you need to:
+
+1. Convert to a build-tool project (Vite/Webpack/Parcel)
+2. Install dependencies:
+```bash
+npm install @privacy-bidding/fhevm-sdk fhevmjs ethers
+```
+
+3. Replace the encryption logic:
 ```javascript
-// TODO: Replace plain values with encrypted values
 import { createFhevmClient } from '@privacy-bidding/fhevm-sdk';
 
+// Initialize FHE client
 const fhevmClient = createFhevmClient({ provider, network: 'sepolia' });
 await fhevmClient.initialize();
 
+// Encrypt bid values
 const encryptedAmount = await fhevmClient.encrypt32(bidAmount);
 const encryptedTime = await fhevmClient.encrypt32(completionTime);
 
+// Submit encrypted bid
 await contract.submitBid(
     projectId,
-    encryptedAmount.data,  // Encrypted!
-    encryptedTime.data,    // Encrypted!
+    encryptedAmount.data,  // ✅ Encrypted with SDK!
+    encryptedTime.data,    // ✅ Encrypted with SDK!
     proposal
 );
 ```
+
+**Why not in this file?**
+- This is a standalone HTML file without module bundling
+- SDK requires ES modules and build tools
+- Keeping this as UI demo allows it to run without dependencies
 
 ### 2. Decryption Implementation
 ```javascript
